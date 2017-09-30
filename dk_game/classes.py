@@ -1,14 +1,7 @@
 """Classes du jeu de Labyrinthe Donkey Kong"""
-
-
-import pygame
-from pygame.locals import *
-
-from classes import *
 import pygame
 from constantes import *
-
-
+from collections import deque
 
 class Niveau:
     """Classe permettant de créer un niveau"""
@@ -68,7 +61,7 @@ class Niveau:
 class Perso:
     """Classe permettant de créer un personnage"""
 
-    def __init__(self, niveau):
+    def __init__(self, niveau, job_manager):
         # Position du personnage en cases et en pixels
         self.images = [pygame.image.load(img_folder + "pacman.png").convert_alpha()] * 4
 
@@ -78,6 +71,7 @@ class Perso:
         self.y = 0
         # Niveau dans lequel le personnage se trouve
         self.niveau = niveau
+        self.job_manager = job_manager
 
         self.image = self.images[0]
 
@@ -90,6 +84,8 @@ class Perso:
         if self.can_move_to(next_x, next_y):
             self.case_x = next_x
             self.case_y = next_y
+            return True
+        return False
 
     def next_position(self, direction):
         shift_x, shift_y = movement[direction]
@@ -110,12 +106,14 @@ class Perso:
         return True
 
     def travel(self, direction):
-        self.move(direction)
+        if not self.move(direction):
+            return
 
         backward_direction = opposite_direction(direction)
-        self.continue_to_travel(backward_direction)
 
-    def continue_to_travel(self, backward_direction):
+        self.job_manager.add_job(lambda: self.progress_into_the_path(backward_direction))
+
+    def progress_into_the_path(self, backward_direction=NOWHERE):
 
         possible_direction = []
 
@@ -146,3 +144,18 @@ def opposite_direction(direction):
     if direction in (UP, LEFT) :
         return directions[direction + 1]
     return directions[direction - 1]
+
+
+class JobManager:
+    def __init__(self):
+        self.jobs = deque() # Une file
+
+    def add_job(self, job):
+        self.jobs.append(job)
+
+    def execute_next_job(self):
+        job = self.jobs.popleft() # recup le prochain
+        job() # execute le job
+
+    def has_job(self):
+        return len(self.jobs) # 0 == False

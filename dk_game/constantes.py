@@ -21,6 +21,6 @@ image_depart = img_folder + "depart.png"
 image_arrivee = img_folder + "arrivee.png"
 
 
-UP, DOWN, LEFT, RIGHT = range(4)
+UP, DOWN, LEFT, RIGHT, NOWHERE = range(5)
 directions = (UP, DOWN, LEFT, RIGHT)
 movement = ((0, -1), (0, 1), (-1, 0), (1, 0))

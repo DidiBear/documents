@@ -19,8 +19,12 @@ pygame.display.set_icon(icone)
 # Titre
 pygame.display.set_caption(titre_fenetre)
 
+
+job_manager = JobManager()
+
 # BOUCLE PRINCIPALE
 continuer = 1
+
 while continuer:
     # Chargement et affichage de l'écran d'accueil
     accueil = pygame.image.load(image_accueil).convert()
@@ -76,13 +80,17 @@ while continuer:
         niveau.afficher(fenetre)
 
         # Création de Donkey Kong
-        pc = Perso(niveau)
+        perso = Perso(niveau, job_manager)
+        perso.progress_into_the_path()
 
     # BOUCLE DE JEU
     while continuer_jeu:
 
         # Limitation de vitesse de la boucle
-        pygame.time.Clock().tick(30)
+        pygame.time.Clock().tick(20)
+
+        if job_manager.has_job():
+            job_manager.execute_next_job()
 
         for event in pygame.event.get():
 
@@ -97,25 +105,26 @@ while continuer:
                 if event.key == K_ESCAPE:
                     continuer_jeu = 0
 
-                # Touches de déplacement de Donkey Kong
-                elif event.key == K_RIGHT:
-                    pc.travel(RIGHT)
-                elif event.key == K_LEFT:
-                    pc.travel(LEFT)
-                elif event.key == K_UP:
-                    pc.travel(UP)
-                elif event.key == K_DOWN:
-                    pc.travel(DOWN)
+                elif not job_manager.has_job():
+                     # Touches de déplacement de Donkey Kong
+                    if event.key == K_RIGHT:
+                        perso.travel(RIGHT)
+                    elif event.key == K_LEFT:
+                        perso.travel(LEFT)
+                    elif event.key == K_UP:
+                        perso.travel(UP)
+                    elif event.key == K_DOWN:
+                        perso.travel(DOWN)
 
         # Affichages aux nouvelles positions
         fenetre.blit(fond, (0, 0))
         niveau.afficher(fenetre)
 
-        fenetre.blit(pc.image, (pc.case_x * taille_sprite, pc.case_y * taille_sprite))  # plus besoin du commentaire inutile
+        fenetre.blit(perso.image, (perso.case_x * taille_sprite, perso.case_y * taille_sprite))  # plus besoin du commentaire inutile
 
         pygame.display.flip()
 
         # Victoire -> Retour à l'accueil
-        if niveau.structure[pc.case_y][pc.case_x] == 'a':
+        if niveau.structure[perso.case_y][perso.case_x] == 'a':
             continuer_jeu = 0
 
