@@ -198,7 +198,7 @@ Ici, `FreezerBehaviour` contient toutes les formes de Freezer
 |------------|------------------|---------|:-------------------------:|
 | BaseForm   | hp < 1600        | 50      | FINGER BEAM ! - 100 |
 | SecondForm | hp < 1200        | 75      | DEATH STORM ! - 150 |
-| ThridForm  | hp < 800         | 100     | CRAZY FINGER BEAM !!! - 200 |
+| ThirdForm  | hp < 800         | 100     | CRAZY FINGER BEAM !!! - 200 |
 | FinalForm  |                  | 200     | Dark Death Ball - 400 |
 
 ```java
