@@ -124,7 +124,7 @@ Fighter heros = Fighter.together(new Kaioken(DBZ.GOKU, 3), DBZ.KRILIN, DBZ.GOHAN
 Arena.battle(heros, DBZ.VEGETA);
 ```
 
-- Faites en pour qu'ils puissent combattre ensemble. \
+- Faites en sorte qu'ils puissent combattre ensemble. \
 Un seul des 3 peut attaquer à la fois, et les dégats ne sont ingligés qu'à un seul. \
 (attention à ne pas oublier le `toString()`)
 
