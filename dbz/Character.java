@@ -29,6 +29,7 @@ public class Character implements Fighter {
 		health -= damage;		
 	}
 
+	@Override
 	public boolean isAlive() {
 		return health > 0;
 	}
